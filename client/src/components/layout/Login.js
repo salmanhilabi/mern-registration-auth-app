@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { loginUser } from "../../actions/authActions";
+import { loginUser, removeErrors } from "../../actions/authActions";
 
 class LoginPage extends Component {
   constructor() {
@@ -15,17 +15,17 @@ class LoginPage extends Component {
   }
 
   componentDidMount() {
+    this.props.removeErrors();
     if (this.props.auth.isAuthenticated) {
       this.props.history.push("/dashboard");
     }
   }
 
   // add the errors properties in state when it's available
-  static getDerivedStateFromProps(props, state){
-     if(props.errors !== state.errors){
-       return { errors: props.errors};
-    }
-    else return null;
+  static getDerivedStateFromProps(props, state) {
+    if (props.errors !== state.errors) {
+      return { errors: props.errors };
+    } else return null;
   }
 
   onChange = e => {
@@ -120,4 +120,4 @@ const mapStateToProps = state => ({
   errors: state.errors
 });
 
-export default connect(mapStateToProps, { loginUser })(LoginPage);
+export default connect(mapStateToProps, { loginUser, removeErrors })(LoginPage);

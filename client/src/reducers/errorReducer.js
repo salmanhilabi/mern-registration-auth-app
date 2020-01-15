@@ -2,9 +2,11 @@ const initialState = {};
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case 'GET_ERRORS':
+    case "GET_ERRORS":
+      return action.payload;
+    case "REMOVE_ERRORS":
       return action.payload;
     default:
       return state;
   }
-}
+};

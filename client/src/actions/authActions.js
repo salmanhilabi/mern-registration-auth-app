@@ -4,56 +4,61 @@ import jwt_decode from "jwt-decode";
 
 // Register User
 export const registerUser = (userData, history) => dispatch => {
-  axios.post("/api/register", userData)
+  axios
+    .post("/api/register", userData)
     .then(res => history.push("/login"))
     .catch(err => {
       dispatch({
-        type: 'GET_ERRORS',
+        type: "GET_ERRORS",
         payload: err.response.data
-      })
-    })
+      });
+    });
+};
+
+export const removeErrors = () => dispatch => {
+  dispatch({ type: "REMOVE_ERRORS", payload: {} });
 };
 
 // Login - get user token
 export const loginUser = userData => dispatch => {
-  axios.post("/api/login", userData)
+  axios
+    .post("/api/login", userData)
     .then(res => {
-      console.log(res)
       const { token } = res.data;
       localStorage.setItem("jwtToken", token);
       setAuthToken(token);
       const decoded = jwt_decode(token);
       dispatch(setCurrentUser(decoded));
-      window.location.href = "./login";
+      window.location.hash = "/dashboard";
     })
     .catch(err => {
-      console.log(err.response)
       dispatch({
-        type: 'GET_ERRORS',
+        type: "GET_ERRORS",
         payload: err.response.data
-      })
-    })
+      });
+    });
 };
 
 // Change password
 export const updatePassword = (newPassword, id, history) => dispatch => {
-  axios.put("/api/update"+id, newPassword)
+  axios
+    .put("/api/update" + id, newPassword)
     .then(res => {
-      dispatch(logoutUser())
-      history.push("/login")
+      dispatch(logoutUser());
+      history.push("/login");
     })
     .catch(err => {
       dispatch({
-        type: 'GET_ERRORS',
+        type: "GET_ERRORS",
         payload: err.response.data
-      })
+      });
     });
 };
 
 // Set logged in user
 export const setCurrentUser = decoded => {
   return {
-    type: 'SET_CURRENT_USER',
+    type: "SET_CURRENT_USER",
     payload: decoded
   };
 };

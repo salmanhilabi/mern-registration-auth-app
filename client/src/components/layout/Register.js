@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import { Link, withRouter } from "react-router-dom";
+import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { registerUser } from "../../actions/authActions";
+import { registerUser, removeErrors } from "../../actions/authActions";
 
 class RegisterPage extends Component {
   constructor() {
@@ -17,17 +17,16 @@ class RegisterPage extends Component {
   }
 
   componentDidMount() {
+    this.props.removeErrors();
     if (this.props.auth.isAuthenticated) {
       this.props.history.push("/dashboard");
     }
   }
-
   // add the errors properties in state when it's available
-  static getDerivedStateFromProps(props, state){
-     if(props.errors !== state.errors){
-       return { errors: props.errors};
-    }
-    else return null;
+  static getDerivedStateFromProps(props, state) {
+    if (props.errors !== state.errors) {
+      return { errors: props.errors };
+    } else return null;
   }
 
   onChange = e => {
@@ -113,7 +112,8 @@ class RegisterPage extends Component {
                     marginTop: "1rem"
                   }}
                   type="submit"
-                  className="btn btn-large waves-effect waves-light hoverable blue accent-3">
+                  className="btn btn-large waves-effect waves-light hoverable blue accent-3"
+                >
                   Sign up
                 </button>
               </div>
@@ -128,6 +128,7 @@ class RegisterPage extends Component {
 // checking & always provid specified data type for error prevention
 RegisterPage.propTypes = {
   registerUser: PropTypes.func.isRequired,
+  removeErrors: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired
 };
@@ -137,5 +138,6 @@ const mapStateToProps = state => ({
   errors: state.errors
 });
 
-
-export default connect(mapStateToProps, { registerUser })(withRouter(RegisterPage));
+export default connect(mapStateToProps, { registerUser, removeErrors })(
+  RegisterPage
+);
