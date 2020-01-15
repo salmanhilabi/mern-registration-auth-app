@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const keys = require("../../config/keys");
 
 const connection = mongoose
-  .connect(process.env.MONGOLAB_URI || keys.mongoURL, {
+  .connect(process.env.MONGODB_URI || keys.mongoURL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true
