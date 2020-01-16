@@ -5,6 +5,27 @@ const nodemailer = require('nodemailer');
 const MongoUser = require('../mongodb/models/mongo_user');
 const User = require('../mysql/models/mysql_user');
 
+// Send successfull registeration email to the user
+const sendMail = () => {
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+      auth: {
+        user: 'salman.webdeveloper2018@gmail.com', // add an email here to be able to send mail through it
+        pass: keys.emailPassword // add email password
+    }
+  });
+  const mailOptions = {
+    from: 'youremail@gmail.com', // sender address
+    to: email,
+    subject: 'MERN STACK REGISTRATION WEB APP', // Subject line
+    html: `<p>Hey ${name}, <br/> Your temporary Email have been successfully registerd</p>`// plain text body
+  };
+  transporter.sendMail(mailOptions,  (err, info) => {
+    if(err) return console.log(err);
+    done();
+  });
+}
+
 // Check if user doesn't exist then create a new user
 const registerUser = async ({ name, email, password, res }) => {
   // MongoDB Database registration
@@ -24,26 +45,9 @@ const registerUser = async ({ name, email, password, res }) => {
           newUser.save()
             .then(user => {
               res.status(200).json(user)
-              // Send Email to the user
-              const transporter = nodemailer.createTransport({
-                service: 'gmail',
-                  auth: {
-                    user: 'salman.webdeveloper2018@gmail.com', // add an email here to be able to send mail through it
-                    pass: keys.emailPassword // add email password
-                }
-              });
-              const mailOptions = {
-                 from: 'youremail@gmail.com', // sender address
-                 to: email,
-                 subject: 'MESSAGE FROM MERN STACK REGISTRATION WEB APP', // Subject line
-                 html: `<p>Hey ${name}, <br/> Your temporary Email have been successfully registerd</p>`// plain text body
-              };
-              transporter.sendMail(mailOptions,  (err, info) => {
-                 if(err) return console.log(err);
-                 done();
-              });
-          })
-          .catch(err => res.status(400).json(err));
+              sendMail()
+            })
+            .catch(err => res.status(400).json(err));
         });
       });
   });
@@ -67,26 +71,9 @@ const registerUser = async ({ name, email, password, res }) => {
   //         })
   //         .then(user => {
   //            res.status(200).json(user)
-  //            // Send Email to the user
-  //            const transporter = nodemailer.createTransport({
-  //            service: 'gmail',
-  //               auth: {
-  //                  user: 'salman.webdeveloper2018@gmail.com',
-  //                  pass: keys.emailPassword
-  //               }
-  //            });
-  //            const mailOptions = {
-  //               from: 'salman.webdeveloper2018@gmail.com', // sender address
-  //               to: email,
-  //               subject: 'MESSAGE FROM MERN STACK REGISTRATION WEB APP', // Subject line
-  //               html: `<p>Hey ${name}, <br/> Your temporary Email have been successfully registerd</p>`// plain text body
-  //            };
-  //            transporter.sendMail(mailOptions,  (err, info) => {
-  //               if(err) return console.log(err);
-  //               done();
-  //            });
-  //          })
-  //          .catch(err => console.log(err));
+  //            sendMail();
+  //         })
+  //         .catch(err => console.log(err));
   //      });
   //    });
   // })
