@@ -6,7 +6,7 @@ const MongoUser = require('../mongodb/models/mongo_user');
 const User = require('../mysql/models/mysql_user');
 
 // Send successfull registeration email to the user
-const sendMail = () => {
+const sendMail = (email, name) => {
   const transporter = nodemailer.createTransport({
     service: 'gmail',
       auth: {
@@ -45,7 +45,7 @@ const registerUser = async ({ name, email, password, res }) => {
           newUser.save()
             .then(user => {
               res.status(200).json(user)
-              sendMail()
+              sendMail(email, name);
             })
             .catch(err => res.status(400).json(err));
         });
@@ -71,7 +71,7 @@ const registerUser = async ({ name, email, password, res }) => {
   //         })
   //         .then(user => {
   //            res.status(200).json(user)
-  //            sendMail();
+  //            sendMail(email, name);
   //         })
   //         .catch(err => console.log(err));
   //      });
