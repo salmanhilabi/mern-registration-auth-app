@@ -29,7 +29,7 @@ export const loginUser = userData => dispatch => {
       setAuthToken(token);
       const decoded = jwt_decode(token);
       dispatch(setCurrentUser(decoded));
-      window.location.hash = "/dashboard";
+      window.location.href = "/dashboard";
     })
     .catch(err => {
       dispatch({

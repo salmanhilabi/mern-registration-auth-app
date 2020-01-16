@@ -3,7 +3,7 @@ import { Provider } from "react-redux";
 import LandingPage from "./components/layout/Landing";
 import RegisterPage from "./components/layout/Register";
 import LoginPage from "./components/layout/Login";
-import { HashRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import store from "./store";
 import jwt_decode from "jwt-decode";
 import setAuthToken from "./utils/setAuthToken";

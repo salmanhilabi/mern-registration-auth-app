@@ -21,11 +21,10 @@ class ChangePassword extends Component {
     }
   }
 
-  static getDerivedStateFromProps(props, state){
-     if(props.errors !== state.errors){
-       return { errors: props.errors};
-    }
-    else return null;
+  static getDerivedStateFromProps(props, state) {
+    if (props.errors !== state.errors) {
+      return { errors: props.errors };
+    } else return null;
   }
 
   onChange = e => {
@@ -39,7 +38,11 @@ class ChangePassword extends Component {
       newPassword: this.state.newPassword,
       newPassword2: this.state.newPassword2
     };
-    this.props.updatePassword(newPassword, this.props.auth.user.id, this.props.history);
+    this.props.updatePassword(
+      newPassword,
+      this.props.auth.user.id,
+      this.props.history
+    );
   };
 
   render() {
@@ -54,7 +57,7 @@ class ChangePassword extends Component {
             </Link>
             <div className="col s12" style={{ paddingLeft: "11.250px" }}>
               <h4>
-                <b>Change Password</b> below
+                <b>Change Password</b>
               </h4>
             </div>
             <form noValidate onSubmit={this.onSubmit}>
@@ -65,8 +68,11 @@ class ChangePassword extends Component {
                   id="currentPassword"
                   type="Password"
                 />
-              <label htmlFor="currentPassword">Current Password</label>
-                <span className="red-text">{errors.currentPassword}{errors.passwordmismatch}</span>
+                <label htmlFor="currentPassword">Current Password</label>
+                <span className="red-text">
+                  {errors.currentPassword}
+                  {errors.passwordmismatch}
+                </span>
               </div>
               <div className="input-field col s12">
                 <input
@@ -75,7 +81,7 @@ class ChangePassword extends Component {
                   id="newPassword"
                   type="password"
                 />
-              <label htmlFor="newPassword">New Password</label>
+                <label htmlFor="newPassword">New Password</label>
                 <span className="red-text">{errors.newPassword}</span>
               </div>
               <div className="input-field col s12">
@@ -85,7 +91,7 @@ class ChangePassword extends Component {
                   id="newPassword2"
                   type="password"
                 />
-              <label htmlFor="newPassword2">Confirm New Password</label>
+                <label htmlFor="newPassword2">Confirm New Password</label>
                 <span className="red-text">{errors.newPassword2}</span>
               </div>
               <div className="col s12" style={{ paddingLeft: "11.250px" }}>
@@ -97,7 +103,8 @@ class ChangePassword extends Component {
                     marginTop: "1rem"
                   }}
                   type="submit"
-                  className="btn btn-large waves-effect waves-light hoverable blue accent-3">
+                  className="btn btn-large waves-effect waves-light hoverable blue accent-3"
+                >
                   Update
                 </button>
               </div>
@@ -121,4 +128,4 @@ const mapStateToProps = state => ({
   errors: state.errors
 });
 
-export default connect(mapStateToProps,{ updatePassword })(ChangePassword);
+export default connect(mapStateToProps, { updatePassword })(ChangePassword);
