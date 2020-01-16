@@ -1,55 +1,56 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const keys = require('../config/keys');
-const nodemailer = require('nodemailer');
-const MongoUser = require('../mongodb/models/mongo_user');
-const User = require('../mysql/models/mysql_user');
+const keys = require("../config/keys");
+const nodemailer = require("nodemailer");
+const MongoUser = require("../mongodb/models/mongo_user");
+const User = require("../mysql/models/mysql_user");
 
 // Send successfull registeration email to the user
 const sendMail = (email, name) => {
   const transporter = nodemailer.createTransport({
-    service: 'gmail',
-      auth: {
-        user: 'salman.webdeveloper2018@gmail.com', // add an email here to be able to send mail through it
-        pass: keys.emailPassword // add email password
+    service: "gmail",
+    auth: {
+      user: "salman.webdeveloper2018@gmail.com", // add an email here to be able to send mail through it
+      pass: keys.emailPassword // add email password
     }
   });
   const mailOptions = {
-    from: 'youremail@gmail.com', // sender address
+    from: "salman.webdeveloper2018@gmail.com", // sender address
     to: email,
-    subject: 'MERN STACK REGISTRATION WEB APP', // Subject line
-    html: `<p>Hey ${name}, <br/> Your temporary Email have been successfully registerd</p>`// plain text body
+    subject: "MERN STACK REGISTRATION WEB APP", // Subject line
+    html: `<p>Hey ${name}, <br/> Your temporary Email have been successfully registerd</p>` // plain text body
   };
-  transporter.sendMail(mailOptions,  (err, info) => {
-    if(err) return console.log(err);
+  transporter.sendMail(mailOptions, (err, info) => {
+    if (err) return console.log(err);
     done();
   });
-}
+};
 
 // Check if user doesn't exist then create a new user
 const registerUser = async ({ name, email, password, res }) => {
   // MongoDB Database registration
   return await MongoUser.findOne({ email }).then(user => {
-      if (user) {
-        return res.status(400).json({ email: "Email already exists" });
-      }
-      // bcrypt encrypts the password before it goes to th database
-      bcrypt.genSalt(10, (err, salt) => {
-        bcrypt.hash(password, salt, (err, hash) => {
-          if (err) throw err;
-          const newUser = new MongoUser({
-            name,
-            email,
-            password: hash
-          });
-          newUser.save()
-            .then(user => {
-              res.status(200).json(user)
-              sendMail(email, name);
-            })
-            .catch(err => res.status(400).json(err));
+    if (user) {
+      return res.status(400).json({ email: "Email already exists" });
+    }
+    // bcrypt encrypts the password before it goes to th database
+    bcrypt.genSalt(10, (err, salt) => {
+      bcrypt.hash(password, salt, (err, hash) => {
+        if (err) throw err;
+        const newUser = new MongoUser({
+          name,
+          email,
+          password: hash
         });
+        newUser
+          .save()
+          .then(user => {
+            res.status(200).json(user);
+            sendMail(email, name);
+          })
+          .catch(err => res.status(400).json(err));
       });
+    });
   });
   // MongoDB setup end here
 
@@ -82,7 +83,7 @@ const registerUser = async ({ name, email, password, res }) => {
 };
 
 // Check if user does exist then login the user
-const loginUser = async ({email, password, res}) => {
+const loginUser = async ({ email, password, res }) => {
   // MongoDB Database Login
   //////////////////////////
   return await MongoUser.findOne({ email }).then(user => {
@@ -104,7 +105,7 @@ const loginUser = async ({email, password, res}) => {
             expiresIn: 3600000
           },
           (err, token) => {
-            if(err) return console.log(err);
+            if (err) return console.log(err);
             res.json({
               success: true,
               token: "Token " + token
@@ -112,7 +113,7 @@ const loginUser = async ({email, password, res}) => {
           }
         );
       } else {
-         return res.status(400).json({ incorrect: "Password incorrect" });
+        return res.status(400).json({ incorrect: "Password incorrect" });
       }
     });
   });
@@ -153,7 +154,7 @@ const loginUser = async ({email, password, res}) => {
   // });
   ///////////////////////
   // Mysql Setup end here
-}
+};
 
 // Validate, Encrypt & Change password
 const changePassword = async ({ id, currentPassword, newPassword, res }) => {
@@ -161,20 +162,27 @@ const changePassword = async ({ id, currentPassword, newPassword, res }) => {
   ///////////////////////////////////
   return await MongoUser.findOne({ _id: id }).then(user => {
     bcrypt.compare(currentPassword, user.password).then(isMatch => {
-      if(!isMatch){
-        return res.status(400).json({ passwordmismatch: "Current password doesn't match with old password" });
+      if (!isMatch) {
+        return res.status(400).json({
+          passwordmismatch: "Current password doesn't match with old password"
+        });
       }
       bcrypt.genSalt(10, (err, salt) => {
         bcrypt.hash(newPassword, salt, (err, hash) => {
-          if(err) throw err;
+          if (err) throw err;
           newPassword = hash;
-          MongoUser.findOneAndUpdate({_id: id}, {$set: {password: newPassword}}, {new: true, useFindAndModify: false}, (err, user) => {
-            res.status(200).json(user)
-          })
-        })
-      })
-    })
-  })
+          MongoUser.findOneAndUpdate(
+            { _id: id },
+            { $set: { password: newPassword } },
+            { new: true, useFindAndModify: false },
+            (err, user) => {
+              res.status(200).json(user);
+            }
+          );
+        });
+      });
+    });
+  });
   //////////////////////////
   // MongoDB setup end here
 
@@ -200,5 +208,4 @@ const changePassword = async ({ id, currentPassword, newPassword, res }) => {
   // MongoDB setup end here
 };
 
-
-module.exports = {registerUser, loginUser, changePassword};
+module.exports = { registerUser, loginUser, changePassword };
