@@ -1,7 +1,7 @@
 # mern-registration-auth-app
 This is a Complete yet simple MERN Stack Registration & Login with Authentication Web App that any app needs
 
-# Demo
+## Demo
 https://mernregistration.herokuapp.com/#/
 
 ## Features of this App
