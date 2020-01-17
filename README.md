@@ -24,4 +24,5 @@ even thought this app is called MERN Stack app which uses a Mongodb database i a
 
 2, Passport.js where middleware session starts
 
-3, helper.js where registeration, login and passwordChanges function is setup
+3, helper.js where registeration, login and passwordChange function is setup
+
