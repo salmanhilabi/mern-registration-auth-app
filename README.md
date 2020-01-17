@@ -21,5 +21,7 @@ This is a Complete yet simple MERN Stack Registration & Login with Authenticatio
 even thought this app is called MERN Stack app which uses a Mongodb database i also have added a mysql database on it so the only thing you need is to comment the Mongodb setup and uncomment mysql setup which is in three files
 
 1, Server.js where the database is connected
+
 2, Passport.js where middleware session starts
+
 3, helper.js where registeration, login and passwordChanges function is setup
