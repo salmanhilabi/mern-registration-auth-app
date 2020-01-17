@@ -1,5 +1,5 @@
 module.exports = {
-  secretOrKey: "secret",
+  secretOrKey: "your-secret-key",
   emailPassword:
     "your-email-password",
   mongoURL:
