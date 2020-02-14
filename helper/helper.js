@@ -10,12 +10,12 @@ const sendMail = (email, name) => {
   const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
-      user: "salman.webdeveloper2018@gmail.com", // add an email here to be able to send mail through it
-      pass: keys.emailPassword // add email password
+      user: "youremail@gmail.com", // add an email here to be able to send mail through it
+      pass: keys.email_Password // add email password
     }
   });
   const mailOptions = {
-    from: "salman.webdeveloper2018@gmail.com", // sender address
+    from: "youremail@gmail.com", // sender address
     to: email,
     subject: "MERN STACK REGISTRATION WEB APP", // Subject line
     html: `<p>Hey ${name}, <br/> Your temporary Email have been successfully registerd</p>` // plain text body
