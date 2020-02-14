@@ -1,4 +1,4 @@
-# mern-registration-auth-app
+# Mern-Registration-Auth-App
 This is a Complete yet simple MERN Stack Registration & Login with Authentication Web App that any app needs
 
 ## Demo
